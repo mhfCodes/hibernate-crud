@@ -38,4 +38,21 @@ public class StudentDao {
 		}
 	}
 	
+	public Student getStudentById(Long id) {
+		Transaction transaction = null;
+		Student student = null;
+		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+			
+			transaction = session.beginTransaction();
+			student = session.get(Student.class, id);
+			transaction.commit();
+			
+		} catch (Exception e) {
+			if (transaction != null) {
+				transaction.rollback();
+			}
+		}
+		return student;
+	}
+	
 }
